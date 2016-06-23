@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>dont-direct-operate-dom</title>
+<link rel="stylesheet" type="text/css" href="css/main.css">
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script src="js/jquery-2.1.4.min.js"></script>
+<script src="js/lodash-4.13.1.min.js"></script>
+<script src="js/main.js"></script>
+</head>
+<body>
+<div id="main_box"></div>
+<div id="pop_up_box"></div>
+
+<script type="text/html" id="main_box_tpl">
+
+        <% if (jsonData.status == "preView"){ %>
+            <button class="btn btn-warning status-btn" onclick="changePageStatus()">预览</button>
+            <% }else if(jsonData.status == "edit") { %>
+            <button class="btn btn-info status-btn" onclick="changePageStatus()">编辑</button>
+        <% } %>
+
+    <% if (jsonData.status == "preView"){ %>
+    <a class="add-form-item-btn" onclick="createPopUpBox()"><span class="glyphicon glyphicon-plus"></span></a>
+    <% } %>
+    <form action="#" class="content-form">
+        <% if (jsonData.formData.length == 0){ %>
+        啥都没有，唉！
+        <% }else{
+        var deleteButtonStatus = jsonData.status === "preView" ? "" : "none";
+        for(var i in jsonData.formData) {
+                var formitem = jsonData.formData[i],
+                    itemLableName = formitem["type"] == "text" ? "文本":"日期";%>
+        <div class="content-div">
+            <label class="content-label"> <%= itemLableName %> </label>
+            <span class="content-text"> <%= formitem.text %> </span>
+            <a class="content-remove" id="<%= formitem.id %>" href="#" onclick="removeFormItem(this.id)" style="display:<%= formitem.text %> ;">
+                <span class="glyphicon glyphicon-minus"></span>
+            </a>
+        </div>
+        <% } }%>
+    </form>
+    <% if (jsonData.status === "edit"){ %>
+    <button class="btn btn-default submit-btn">提交</button>
+    <% } %>
+</script>
+
+<script type="text/html" id="pop_up_box_tpl">
+    <h3>选择添加类型
+        <small>
+            <a href="javascript:;" onclick="closePopUp()">
+                <span class="glyphicon glyphicon-remove"></span>
+            </a>
+            <a href="javascript:;" onclick="addFormItem()">
+                <span class="glyphicon glyphicon-ok"></span>
+            </a>
+        </small>
+    </h3>
+    <div class="form-group">
+        <label class="radio-inline" for="text">
+            <input id="text" name="input-type" type="radio" value="text">文本
+        </label><br>
+        <label class="radio-inline" for="date">
+            <input id="date" name="input-type" type="radio" value="date" checked>日期
+        </label>
+    </div>';
+</script>
+
+</body>
+</html>
+
+
